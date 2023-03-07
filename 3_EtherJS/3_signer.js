@@ -19,11 +19,15 @@
 // a. Require the `dotenv` and `ethers` packages.
 // Hint: As you did in file 1_wallet and 2_provider.
 
-// Your code here!
+require('dotenv').config();
+const ethers = require("ethers");
 
 // b. Create a Goerli provider.
 
-// Your code here!
+const providerKey = process.env.INFURA_KEY;
+
+const goerliInfuraUrl = `${process.env.INFURA_GOERLI}${providerKey}`;
+const goerliProvider = new ethers.JsonRpcProvider(goerliInfuraUrl);
 
 // Exercise 1. Create a Signer.
 ///////////////////////////////
@@ -39,17 +43,39 @@
 // Hint: a signer is a wallet.
 // Hint2: if you get an error here, check that the private key begins with "0x".
 
-// Your code here!
+let signer = new ethers.Wallet(process.env.METAMASK_1_PRIVATE_KEY);
+console.log(signer.address);
 
 // Exercise 2. Sign something.
 //////////////////////////////
 
 const sign = async (message = 'Hello world') => {
     
-    // Your code here!
+    // Signing the message
+    const signature = await signer.signMessage(message);
+
+    const verifiedSigner = ethers.verifyMessage(message, signature);
+    
+    if (verifiedSigner === signer.address) {
+        console.log('Signature is valid.');
+    }
+    else {
+        console.log('Signature is NOT valid.');
+    }
+
+    let anotherMessage = 'Give me 5 ETH';
+
+    const verifiedSigner2 = ethers.verifyMessage(anotherMessage, signature);
+    
+    if (verifiedSigner2 === signer.address) {
+        console.log('Tampered signature is valid.');
+    }
+    else {
+        console.log('Tampered signature is NOT valid.');
+    }
 };
 
-// sign();
+sign();
 
 // Exercise 3. Connect to the blockchain. 
 /////////////////////////////////////////
@@ -61,10 +87,14 @@ const sign = async (message = 'Hello world') => {
 // Hint: .getNonce()
 
 const connect = async() => {
-    
-    // Your code here!
-};
+    signer = await signer.connect(goerliProvider);
+    // console.log(signer);
 
+    let nonce = await signer.getNonce();
+    // Equivalent to.
+    // let nonce = await goerliProvider.getTransactionCount("unima.eth");
+    console.log('The nonce is', nonce);
+};
 // connect();
 
 // c. Replace the signer created above at exercise 1 with one that takes the 
@@ -74,7 +104,7 @@ const connect = async() => {
 // and the remaning of the exercises. If unclear, just check the solution :)
 
 // Replace the signer created above.
-
+signer = new ethers.Wallet(process.env.METAMASK_1_PRIVATE_KEY, goerliProvider);
 
 
 // Exercise 4. Send a transaction.
@@ -98,10 +128,33 @@ const account2 = process.env.METAMASK_2_ADDRESS;
 
 const sendTransaction = async () => {
 
-    // Your code here!
+    let b1 = await goerliProvider.getBalance(signer.address);
+    let b2 = await goerliProvider.getBalance(account2);
+    b1 = ethers.formatEther(b1);
+    b2 = ethers.formatEther(b2);
+
+    tx = await signer.sendTransaction({
+        to: account2,
+        value: ethers.parseEther("0.01")
+    });
+
+    // console.log(tx);
+    
+    console.log('Transaction is in the mempool...');
+    await tx.wait();
+
+    console.log('Transaction mined!');
+
+    let updatedB1 = await goerliProvider.getBalance(signer.address);
+    let updatedB2 = await goerliProvider.getBalance(account2);
+    updatedB1 = ethers.formatEther(updatedB1);
+    updatedB2 = ethers.formatEther(updatedB2);
+
+    console.log('Balance for', signer.address, 'changed from', b1, 'to', updatedB1);
+    console.log('Balance for', account2, 'changed from', b2, 'to', updatedB2);
 };
 
-// sendTransaction();
+sendTransaction();
 
 
 // Exercise 5. Meddling with Gas.

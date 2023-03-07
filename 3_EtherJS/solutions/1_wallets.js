@@ -48,6 +48,8 @@
 
 // b. Create a function called "exit" that wraps the call to `process.exit` and
 // prints out the exercise number from a global variable called `exercise`.
+require("dotenv").config();
+const ethers = require("ethers");
 
 let exercise = 0;
 
