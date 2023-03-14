@@ -51,6 +51,8 @@
 require("dotenv").config();
 const ethers = require("ethers");
 
+// Hint: German keyboard curly brackets: Alt-gr-7 (open), Alt-gr-8 (close).
+
 let exercise = 0;
 
 function exit() {
