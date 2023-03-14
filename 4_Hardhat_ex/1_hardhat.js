@@ -7,7 +7,8 @@
 // a. Require the `dotenv` and `ethers` packages.
 // Hint: As you did multiple times now.
 
-// Your code here!
+require("dotenv").config();
+const ethers = require("ethers");
 
 
 // Exercise 1. Create a JSON RPC Provider for the Hardhat blockchain.
