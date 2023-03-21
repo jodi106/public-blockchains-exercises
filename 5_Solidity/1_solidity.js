@@ -15,6 +15,8 @@
 
 // Exercise 0. Make sure you environment is set up.
 ///////////////////////////////////////////////////
+const hre = require("hardhat");
+const ethers = require("ethers");
 
 // In 4_Hardhat you have learnt to init a new Hardhat project. 
 // Now, let's do it again! Create a new folder and run `npx hardhat`.
@@ -44,18 +46,28 @@
 // a. What is the meaning of the `pragma` directive at the top of the file?
 // Hint: https://solidity-by-example.org/hello-world/
 
+// ANSWER: pragma specifies the compiler version of Solidity.
+
 // b. The pragma value must be compatible with the version of solidity
 // in `hardhat.config.js. Try to set the value to a lower or higher number
 // and to compile the Lock file. What happens?
 // Hint: npx hardhat compile
 
+// ANSWER: Error HH606: The project cannot be compiled, see reasons below.
+
 // c. Checkpoint. What is the meaning of that caret symbol (^) ?
 // Hint: https://docs.soliditylang.org/en/develop/layout-of-source-files.html#version-pragma
 // Hint2: https://bytearcher.com/articles/semver-explained-why-theres-a-caret-in-my-package-json/
 
+// ANSWER: A source file with the line above does not compile with a compiler earlier than version 0.5.2, 
+// and it also does not work on a compiler starting from version 0.6.0 
+// (this second condition is added by using ^).
+
 // c. Before `pragma` there is an important comment tha sets the license of
 // the contract. Pick a license for your contract.
 // Hint: https://docs.soliditylang.org/en/develop/layout-of-source-files.html#spdx-license-identifier
+
+// ANSWER: add this in the contract for MIT licensing: SPDX-License-Identifier: MIT
 
 // d. The code of the Lock contract is introduced by the `contract` keyword
 // and wrapped in curly braces { ... }. Before `contract` you have the option
@@ -98,6 +110,8 @@
 
 // The type uint (used for variable `unlockTime`) is an alias for another type.
 // Change uint to its aliased name for more clarity.
+
+// ANSWER: uint256
 
 // Hint: remember to redeploy the contract after each change.
 
