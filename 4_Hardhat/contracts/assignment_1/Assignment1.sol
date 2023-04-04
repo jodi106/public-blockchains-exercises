@@ -120,7 +120,6 @@ contract Assignment1 is INFTMINTER, ERC721URIStorage, BaseAssignment {
 
         (bool sent, bytes memory data) = msg.sender.call{value: amount}("");
         require(sent, "Failed to send Ether");
-        //payable(msg.sender).transfer(amount);
     }
 
     function getPrice() public view override returns (uint256) {
